@@ -33,5 +33,7 @@ echo.
 echo Terminal 2 (Frontend):
 echo   cd frontend ^&^& npm start
 echo.
-echo Backend will run on: http://localhost:5000
+echo Backend will run on: http://localhost:5000 (development)
 echo Frontend will run on: http://localhost:3000
+echo.
+echo Production Backend: https://pipeline-builder-zc3n.onrender.com

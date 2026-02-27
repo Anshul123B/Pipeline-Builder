@@ -60,7 +60,7 @@ Pipeline-Builder/
    npm start
    ```
    
-   The backend will run on `http://localhost:5000`
+   The backend will run on `http://localhost:5000` (development) or `https://pipeline-builder-zc3n.onrender.com` (production)
 
 ### Frontend Setup
 

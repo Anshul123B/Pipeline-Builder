@@ -2,7 +2,7 @@ import { useStore } from './store';
 import { shallow } from 'zustand/shallow';
 import { useState } from 'react';
 
-const API_BASE_URL = 'http://localhost:5000';
+const API_BASE_URL = 'https://pipeline-builder-zc3n.onrender.com';
 
 export const SubmitButton = () => {
     const [isLoading, setIsLoading] = useState(false);
