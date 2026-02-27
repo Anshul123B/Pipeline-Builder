@@ -1,0 +1,23 @@
+{
+  "name": "pipeline-builder-backend",
+  "version": "1.0.0",
+  "description": "Backend API for pipeline validation and analysis",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": [
+    "pipeline",
+    "dag",
+    "validation"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {}
+}
