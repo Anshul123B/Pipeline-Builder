@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: pipeline-builder-api
+    runtime: node
+    startCommand: cd backend && npm install && npm start
+    buildCommand: cd backend && npm install
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+    plan: free
+    autoDeploy: true

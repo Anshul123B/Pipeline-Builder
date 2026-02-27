@@ -30,10 +30,16 @@ export const SubmitButton = () => {
             });
 
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(`HTTP ${response.status}: ${errorData.message || response.statusText}`);
             }
 
             const result = await response.json();
+
+            // Validate response structure
+            if (!result.hasOwnProperty('is_dag') || !result.hasOwnProperty('num_nodes') || !result.hasOwnProperty('num_edges')) {
+                throw new Error('Invalid response format from server');
+            }
 
             // Create user-friendly alert message
             const dagStatus = result.is_dag 
@@ -61,7 +67,7 @@ ${result.is_dag
         } catch (error) {
             console.error('Pipeline submission error:', error);
             
-            const errorMessage = `
+            let errorMessage = `
 ❌ Submission Failed
 ━━━━━━━━━━━━━━━━━━━━━
 
@@ -69,14 +75,41 @@ Unable to validate pipeline.
 
 Error: ${error.message}
 
-Please ensure the backend server is running at:
-${API_BASE_URL}
+`;
 
-To start the backend, run:
-npm start (in the backend directory)
-            `.trim();
+            // Provide specific guidance based on error type
+            if (error instanceof TypeError && error.message.includes('fetch')) {
+                errorMessage += `Network Error: Cannot reach backend server.
 
-            alert(errorMessage);
+Please ensure:
+1. Backend is deployed on Render.com
+2. API URL is correct: ${API_BASE_URL}
+3. Check your internet connection
+4. Backend service may be spinning up (can take 30s on free tier)
+
+Retry in a few moments.`;
+            } else if (error.message.includes('HTTP 502') || error.message.includes('HTTP 503')) {
+                errorMessage += `Backend Service Unavailable
+
+This usually means:
+1. Service is starting up (free tier auto-spindown)
+2. Temporary server issue
+
+Please wait 30 seconds and try again.`;
+            } else if (error.message.includes('HTTP 404')) {
+                errorMessage += `API Endpoint Not Found
+
+Please verify:
+1. Backend deployment URL is correct
+2. Endpoint path is /pipelines/parse`;
+            } else {
+                errorMessage += `Backend: ${API_BASE_URL}
+
+To start backend locally:
+npm start (in the backend directory)`;
+            }
+
+            alert(errorMessage.trim());
         } finally {
             setIsLoading(false);
         }
